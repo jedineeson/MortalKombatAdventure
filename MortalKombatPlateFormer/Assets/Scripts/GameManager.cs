@@ -5,14 +5,21 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour 
 {
-	[HideInInspector]
-	public string m_Player;
-	
-	private static GameManager m_Instance;
-	//variable de moi même(on peux y accéder de partout avec LevelManager.Instance)
+    private GameObject m_Player;
+    public GameObject Player
+    {
+        get { return m_Player; }
+    }
+
+    private string m_PlayerName;
+    public string PlayerName
+    {
+        get { return m_PlayerName; }
+    }
+
+    private static GameManager m_Instance;
 	public static GameManager Instance
 	{
-		//on veux jamais le re-set		
 		get { return m_Instance; }
 	}
 
@@ -30,9 +37,14 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
-	public void SetPlayerCharacter(string aName)
+	public void SetPlayerName(string aName)
 	{
-        	m_Player = aName;
+        	m_PlayerName = aName;
 	}
+
+    public void SetPlayerGameObject(GameObject go)
+    {
+        m_Player = go;
+    }
 }
 

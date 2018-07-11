@@ -47,7 +47,7 @@ public class SelectionMenu : MonoBehaviour
 			SubZero.SetActive(true);
 			ConfirmButton.SetActive(true);
 		}
-		GameManager.Instance.SetPlayerCharacter(aName);
+		GameManager.Instance.SetPlayerName(aName);
 	}
 	
 	/*public void SetActiveParasite()

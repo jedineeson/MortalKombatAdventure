@@ -16,8 +16,6 @@ public class LevelManager : MonoBehaviour
     [SerializeField]
     private GameObject m_LoadingScreen;
 
-    
-
     private void Awake()
     {
         if (m_Instance != null)

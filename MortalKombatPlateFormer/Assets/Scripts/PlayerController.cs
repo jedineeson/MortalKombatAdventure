@@ -10,7 +10,11 @@ public class PlayerController : MonoBehaviour
     private Animator m_Animator;
     [SerializeField]
     private Rigidbody2D m_Player;
-
+    [SerializeField]
+	private float m_JumpForce = 650f;
+	[SerializeField]
+	private float m_FakeGravity = 20f;
+    private bool m_IsGrounded = true;
     private bool m_CanMove = true;
     private float m_InputX;
     private Vector2 m_MoveDir = new Vector2();
@@ -49,27 +53,60 @@ public class PlayerController : MonoBehaviour
                 m_Animator.SetBool("Walk", false);
             }
         }
-
+        //INPUT MANAGER
         if (Input.GetKeyDown(KeyCode.K))
         {
             m_MoveDir = Vector2.zero;
             m_Animator.SetTrigger("Kick");
             m_CanMove = false;
+            m_Player.velocity = Vector2.zero;
+        }
+        //INPUT MANAGER
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Jump();
         }
     }
 
     private void FixedUpdate()
 	{
-        if (m_CanMove)
+        m_MoveDir *= m_Speed;
+        m_MoveDir.y = m_Player.velocity.y;
+
+        if(m_Player.velocity.y != 0f)
+		{
+			m_MoveDir.y -= m_FakeGravity * Time.fixedDeltaTime;
+            //m_Animator.SetBool("Jump", true);
+		}
+        else
         {
-            m_MoveDir *= m_Speed;
-            m_MoveDir.y = m_Player.velocity.y;
-            m_Player.velocity = m_MoveDir;
+            //m_Animator.SetBool("Jump", false);
         }
+
+        m_Player.velocity = m_MoveDir;
     }
+
+    private void Jump()
+	{
+		if(m_IsGrounded)
+		{
+            m_Animator.SetTrigger("Jump");                
+			m_IsGrounded = false;
+			m_Player.velocity = new Vector2(m_Player.velocity.x, 0f);
+			m_Player.AddForce(transform.up * m_JumpForce);
+		}
+	}
 
     public void SetCanMove()
     {
         m_CanMove = true;
+    }
+
+    private void OnTriggerEnter2D(Collider2D aOther)
+    {
+        if(aOther.gameObject.layer == LayerMask.NameToLayer("Floor"))
+        {
+            m_IsGrounded = true;
+        }
     }
 }

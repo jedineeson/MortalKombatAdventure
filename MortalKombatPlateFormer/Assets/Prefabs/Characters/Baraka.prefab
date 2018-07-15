@@ -24,7 +24,7 @@ GameObject:
   - component: {fileID: 50352904793517428}
   - component: {fileID: 114278689075676126}
   - component: {fileID: 70463216639644548}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Baraka
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -59,7 +59,7 @@ Rigidbody2D:
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 01f6914708179d04e8abb3bdbacb6584, type: 2}
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0

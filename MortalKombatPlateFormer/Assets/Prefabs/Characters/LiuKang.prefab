@@ -60,7 +60,7 @@ Rigidbody2D:
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 01f6914708179d04e8abb3bdbacb6584, type: 2}
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
@@ -148,6 +148,7 @@ MonoBehaviour:
   m_Player: {fileID: 50681358780663394}
   m_JumpForce: 800
   m_FakeGravity: 20
+  m_Hp: 10
 --- !u!212 &212934361113071148
 SpriteRenderer:
   m_ObjectHideFlags: 1

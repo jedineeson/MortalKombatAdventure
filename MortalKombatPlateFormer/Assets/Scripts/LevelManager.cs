@@ -30,6 +30,11 @@ public class LevelManager : MonoBehaviour
         m_LoadingScreen.SetActive(false);
     }
 
+    private void Start()
+    {
+        ChangeLevel("Menu");
+    }
+
     private void OnLoadingDone(Scene aScene, LoadSceneMode aMode)
     {
         SceneManager.sceneLoaded -= OnLoadingDone;
@@ -43,12 +48,20 @@ public class LevelManager : MonoBehaviour
 
     private IEnumerator Loading(string aScene)
     {
-        m_LoadingScreen.SetActive(true);
         /*if (AudioManager.Instance != null)
         {
             AudioManager.Instance.StopMusic();
         }*/
-        yield return new WaitForSeconds(m_LoadingTimer);
+        if (aScene != "Menu")
+        {
+            m_LoadingScreen.SetActive(true); 
+            yield return new WaitForSeconds(m_LoadingTimer);         
+        }
+        else 
+        {
+            yield return new WaitForSeconds(0f);      
+        }
+        
         SceneManager.LoadScene(aScene);
         SceneManager.sceneLoaded += OnLoadingDone;
     }

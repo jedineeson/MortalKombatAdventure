@@ -24,10 +24,28 @@ public class GameManager : MonoBehaviour
         get { return m_SubZeroPrefab; }
     }
 
+    private int m_LifeRemains = 3;
+    public int LifeRemains
+    {
+        get { return m_LifeRemains; }
+    }
+    
     private int m_ZoneReach = 0;
     public int ZoneReach
     {
         get { return m_ZoneReach; }
+    }
+
+    private bool m_IsGameOver = false;
+    public bool IsGameOver
+    {
+        get { return m_IsGameOver; }
+    }
+
+    private bool m_Win = false;
+    public bool Win
+    {
+        get { return m_Win; }
     }
 
     private GameObject m_Player;
@@ -75,6 +93,11 @@ public class GameManager : MonoBehaviour
     public void SetZoneReach(int zone)
     {
         m_ZoneReach = zone;
+    }
+
+    public void SetLife(int damage)
+    {
+        m_LifeRemains += damage;
     }
 
 }

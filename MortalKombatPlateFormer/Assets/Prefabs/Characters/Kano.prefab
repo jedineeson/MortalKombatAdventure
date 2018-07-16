@@ -19,11 +19,11 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4769233619614222}
-  - component: {fileID: 212441996542862406}
   - component: {fileID: 95686050356535128}
-  - component: {fileID: 61061540544863040}
+  - component: {fileID: 212441996542862406}
   - component: {fileID: 50149993336080804}
   - component: {fileID: 114490871597648564}
+  - component: {fileID: 61061540544863040}
   m_Layer: 10
   m_Name: Kano
   m_TagString: Untagged
@@ -117,7 +117,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc55d4af6ce4a9e4b872c2ef73cefd86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DelayBetweenAttack: 0
   m_Speed: 4
   m_Rigidbody: {fileID: 50149993336080804}
 --- !u!212 &212441996542862406

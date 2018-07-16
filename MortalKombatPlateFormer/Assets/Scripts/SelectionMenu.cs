@@ -49,22 +49,9 @@ public class SelectionMenu : MonoBehaviour
 		}
 		GameManager.Instance.SetPlayerName(aName);
 	}
-	
-	/*public void SetActiveParasite()
-	{
-		Hulk.SetActive(false);
-		Parasite.SetActive(true);
-		Skeleton.SetActive(false);
-		GameManager.Instance.SetPlayerCharacter(1, 2);
-		LevelManager.Instance.ChangeLevel("Menu p2");
-	}
 
-	public void SetActiveSkeleton()
+	public void Confirm()
 	{
-		Hulk.SetActive(false);
-		Parasite.SetActive(false);
-		Skeleton.SetActive(true);
-		GameManager.Instance.SetPlayerCharacter(1, 3);
-		LevelManager.Instance.ChangeLevel("Menu p2");
-	}*/
+		LevelManager.Instance.ChangeLevel("Game");
+	}
 }

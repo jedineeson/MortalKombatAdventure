@@ -21,6 +21,7 @@ public class PlayerController : MonoBehaviour
     private bool m_IsGrounded = true;
     private bool m_CanMove = true;
     private float m_InputX;
+    private bool m_IsDead = false;
 
     private Vector2 m_MoveDir = new Vector2();
     private SpriteRenderer m_Visual;
@@ -44,9 +45,7 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log("Life: " + m_Hp);
-
-        if (m_CanMove)
+        if (m_CanMove && !m_IsDead)
         {
             m_InputX = Input.GetAxisRaw("Horizontal");
             if (m_InputX > 0f)
@@ -68,16 +67,17 @@ public class PlayerController : MonoBehaviour
             }
         }
         //INPUT MANAGER
-        if (Input.GetKeyDown(KeyCode.K))
+        if (Input.GetKeyDown(KeyCode.K) && !m_IsDead)
         {
             m_MoveDir = Vector2.zero;
             m_Animator.SetTrigger("Kick");
             m_CanMove = false;
             m_Player.velocity = Vector2.zero;
-            KickResult();
+            StartCoroutine(KickResult());
+
         }
         //INPUT MANAGER
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && !m_IsDead)
         {
             Jump();
         }
@@ -103,7 +103,7 @@ public class PlayerController : MonoBehaviour
 
     private void Jump()
     {
-        if (m_IsGrounded)
+        if (m_IsGrounded && !m_IsDead)
         {
             m_Animator.SetTrigger("Jump");
             m_IsGrounded = false;
@@ -125,8 +125,9 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void KickResult()
+    private IEnumerator KickResult()
     {
+        yield return new WaitForSeconds(1f);
         m_RayPos.x = transform.position.x;
         m_RayPos.y = transform.position.y;
         if (m_Visual.flipX == false)
@@ -147,10 +148,11 @@ public class PlayerController : MonoBehaviour
     public void OnUpdateHp(int damage = 1)
     {
         m_Hp -= damage;
-        if (m_Hp <= 0)
+        if (m_Hp <= 0 && !m_IsDead)
         {
             m_Animator.SetTrigger("Die");
             StartCoroutine(DestroyMyself());
+            m_IsDead = true;
         }
         else
         {
@@ -161,9 +163,8 @@ public class PlayerController : MonoBehaviour
     private IEnumerator DestroyMyself()
     {
         yield return new WaitForSeconds(2f);
-
-        LevelManager.Instance.ChangeLevel("Game");
-
-        Destroy(gameObject);
+        GameManager.Instance.SetLife(-1);
+        LevelManager.Instance.ChangeLevel("End");
+        //Destroy(gameObject);
     }
 }

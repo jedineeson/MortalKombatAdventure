@@ -53,6 +53,9 @@ TagManager:
   - name: Floor
     uniqueID: 1192216323
     locked: 0
+  - name: Stone
+    uniqueID: 2978096215
+    locked: 0
   - name: Entrance
     uniqueID: 1964375317
     locked: 0

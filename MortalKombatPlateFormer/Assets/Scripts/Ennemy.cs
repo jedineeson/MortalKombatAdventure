@@ -6,29 +6,24 @@ using UnityEngine;
 public class Ennemy : MonoBehaviour
 {
     private Action<int> m_DamageEnnemy;
-	[SerializeField]
-    private float DelayBetweenAttack;    
-	[SerializeField]
-	private float m_Speed;
-	[SerializeField] 
-	private Rigidbody2D m_Rigidbody;
-	private GameObject m_Player;
-	private SpriteRenderer m_Visual;
-	private Vector2 m_MoveDir = new Vector2();
-	private Animator m_Animator;
+    private float DelayBetweenAttack;
+    [SerializeField]
+    private float m_Speed;
+    [SerializeField]
+    private Rigidbody2D m_Rigidbody;
+    private SpriteRenderer m_Visual;
+    private Vector2 m_MoveDir = new Vector2();
+    private Animator m_Animator;
     private bool m_IsAttack = false;
     private Vector2 m_RayPos;
     private RaycastHit2D m_Hit;
+    private bool m_CanAttack = true;
 
     private void Start()
     {
         m_Visual = gameObject.GetComponent<SpriteRenderer>();
         m_Animator = gameObject.GetComponent<Animator>();
-        if(GameManager.Instance.Player != null)
-        {
-            m_Player = GameManager.Instance.Player;
-            m_DamageEnnemy += m_Player.GetComponent<PlayerController>().OnUpdateHp;
-        }
+        m_DamageEnnemy += GameManager.Instance.Player.GetComponent<PlayerController>().OnUpdateHp;
     }
 
     private void Update()
@@ -37,7 +32,7 @@ public class Ennemy : MonoBehaviour
         {
             Destroy(this);
         }
-        else if (m_Player != null)
+        else if (GameManager.Instance.Player != null)
         {
             if (DelayBetweenAttack > 0f)
             {
@@ -48,37 +43,56 @@ public class Ennemy : MonoBehaviour
                 m_IsAttack = false;
             }
 
-            if (transform.position.x < m_Player.transform.position.x - 1.5f)
+            if (m_CanAttack)
             {
-                m_Visual.flipX = false;
-                m_MoveDir = transform.right;
-                m_Animator.SetBool("Walk", true);
-            }
-            else if (transform.position.x > m_Player.transform.position.x + 1.5f)
-            {
-                m_Visual.flipX = true;
-                m_MoveDir = -transform.right;
-                m_Animator.SetBool("Walk", true);
-            }
-            else if (m_IsAttack == false)
-            {
-                m_MoveDir = Vector2.zero;
-                m_Animator.SetBool("Walk", false);
-                m_Animator.SetTrigger("Attack");
-                m_IsAttack = true;
-                DelayBetweenAttack += 2f;
+                if (transform.position.x < GameManager.Instance.Player.transform.position.x - 1.5f)
+                {
+                    m_Visual.flipX = false;
+                    m_MoveDir = transform.right;
+                    m_Animator.SetBool("Walk", true);
+                }
+                else if (transform.position.x > GameManager.Instance.Player.transform.position.x + 1.5f)
+                {
+                    m_Visual.flipX = true;
+                    m_MoveDir = -transform.right;
+                    m_Animator.SetBool("Walk", true);
+                }
+                else if (!m_IsAttack)
+                {
+                    m_MoveDir = Vector2.zero;
+                    m_Animator.SetBool("Walk", false);
+                    m_Animator.SetTrigger("Attack");
+                    m_IsAttack = true;
+                    DelayBetweenAttack += 2f;
 
-                Attack();
-            }
-            else
-            {
-                m_MoveDir = Vector2.zero;
+                    StartCoroutine(Attack());
+                }
+                else
+                {
+                    m_MoveDir = Vector2.zero;
+                }
+
+                m_RayPos.x = transform.position.x;
+                m_RayPos.y = transform.position.y;
+                
+                /*if (m_Visual.flipX == false)
+                {
+                    m_Hit = Physics2D.Raycast(m_RayPos, -transform.right, 2f, LayerMask.GetMask("Enemy"));
+                }
+                else
+                {
+                    m_Hit = Physics2D.Raycast(m_RayPos, transform.right, 2f, LayerMask.GetMask("Enemy"));
+                }
+                if (m_Hit.collider != null)
+                {
+                    m_MoveDir = Vector2.zero;
+                }*/
             }
         }
     }
-    	 
-	private void FixedUpdate()
-	{
+
+    private void FixedUpdate()
+    {
         if (m_Rigidbody != null)
         {
             m_MoveDir *= m_Speed;
@@ -87,27 +101,37 @@ public class Ennemy : MonoBehaviour
         }
     }
 
-    private void Attack()
+    private IEnumerator Attack()
     {
         m_RayPos.x = transform.position.x;
         m_RayPos.y = transform.position.y;
-        if (transform.position.x > m_Player.transform.position.x)
+        if (transform.position.x > GameManager.Instance.Player.transform.position.x)
         {
+            yield return new WaitForSeconds(0.7f);
+
             m_Hit = Physics2D.Raycast(m_RayPos, -transform.right, 2f, LayerMask.GetMask("Player"));
+            if (m_Hit.collider != null)
+            {
+                m_DamageEnnemy(1);
+            }
+
         }
-        else if (transform.position.x < m_Player.transform.position.x)
-        {
+        else if (transform.position.x < GameManager.Instance.Player.transform.position.x)
+        {   
+            yield return new WaitForSeconds(0.7f);
+
             m_Hit = Physics2D.Raycast(m_RayPos, transform.right, 2f, LayerMask.GetMask("Player"));
-        }
-        if (m_Hit.collider != null)
-        {
-            m_DamageEnnemy(1);
+            if (m_Hit.collider != null)
+            {
+                m_DamageEnnemy(1);
+            }        
         }
     }
 
     public void Die()
     {
         m_Animator.SetTrigger("Die");
+        m_CanAttack = false;
         StartCoroutine(DestroyMyself());
     }
 

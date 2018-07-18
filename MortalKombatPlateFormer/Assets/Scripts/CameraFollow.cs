@@ -56,14 +56,11 @@ public class CameraFollow : MonoBehaviour
             transform.position = m_BossCamPos.position;            
         }
     }
-
-    private void OnTriggerEnter2d(Collider2D aOther)
+    
+    public void SetCameraFix()
     {
-        if(aOther.tag == "Player")
-        {
-            Debug.Log("ENTER BOSS ZONE");
-            m_CamFixed = true;
-        }
+        m_CamFixed = true;
     }
+
 }
 

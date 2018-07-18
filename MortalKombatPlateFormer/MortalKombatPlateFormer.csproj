@@ -244,8 +244,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\Boss.cs" />
+    <Compile Include="Assets\Scripts\CameraFix.cs" />
     <Compile Include="Assets\Scripts\CameraFollow.cs" />
     <Compile Include="Assets\Scripts\CheckPoint.cs" />
+    <Compile Include="Assets\Scripts\EndMenu.cs" />
     <Compile Include="Assets\Scripts\Ennemy.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />
     <Compile Include="Assets\Scripts\InstantiateEnnemy.cs" />

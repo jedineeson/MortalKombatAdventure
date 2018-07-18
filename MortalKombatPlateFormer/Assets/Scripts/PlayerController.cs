@@ -111,6 +111,8 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    
+
     public void SetCanMove()
     {
         m_CanMove = true;
@@ -140,7 +142,14 @@ public class PlayerController : MonoBehaviour
 
         if (m_Hit.collider != null)
         {
-            m_Hit.collider.gameObject.GetComponent<Ennemy>().Die();
+            if(m_Hit.collider.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+            {
+                m_Hit.collider.gameObject.GetComponent<Ennemy>().Die();
+            }
+            else if(m_Hit.collider.gameObject.layer == LayerMask.NameToLayer("Goro") && !m_Hit.collider.gameObject.GetComponent<Boss>().IsVulnerable)
+            {
+                m_Hit.collider.gameObject.GetComponent<Boss>().LoseLife();
+            }
         }
     }
 

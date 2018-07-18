@@ -16,6 +16,11 @@ public class Boss : MonoBehaviour
     private bool m_CanMoveRight;
     private Vector2 m_MoveDir = new Vector2();
     private bool m_IsVulnerable = false;
+    private int m_Hp = 5;
+    public bool IsVulnerable
+    {
+        get { return m_IsVulnerable; }
+    }
 
     private void Update()
     {
@@ -73,6 +78,20 @@ public class Boss : MonoBehaviour
             m_IsVulnerable = false;
             m_CanMoveLeft = true;
             m_Animator.SetBool("Turn", true);
+        }
+    }
+
+    public void LoseLife()
+    {
+        m_Hp -= 1;
+        Debug.Log("GORO HP: " + m_Hp);
+    }
+
+    private void OnTriggerEnter2D(Collider2D aOther)
+    {
+        if (aOther.gameObject.layer == LayerMask.NameToLayer("Player") && !m_IsVulnerable)
+        {
+            GameManager.Instance.Player.GetComponent<PlayerController>().OnUpdateHp(2);
         }
     }
 }

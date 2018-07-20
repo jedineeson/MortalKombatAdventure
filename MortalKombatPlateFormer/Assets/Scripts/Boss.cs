@@ -91,7 +91,7 @@ public class Boss : MonoBehaviour
     {
         if (aOther.gameObject.layer == LayerMask.NameToLayer("Player") && !m_IsVulnerable)
         {
-            GameManager.Instance.Player.GetComponent<PlayerController>().OnUpdateHp(2);
+            GameManager.Instance.Player.GetComponent<PlayerController>().OnUpdateHp(1);
         }
     }
 }

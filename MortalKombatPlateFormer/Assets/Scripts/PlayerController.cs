@@ -21,12 +21,16 @@ public class PlayerController : MonoBehaviour
     private bool m_CanMove = true;
     private float m_InputX;
     private bool m_IsDead = false;
-
+    private bool m_CanFly;
     private Vector2 m_MoveDir = new Vector2();
     private SpriteRenderer m_Visual;
     private Vector2 m_RayPos;
-    private RaycastHit2D m_Hit;
-
+    private RaycastHit2D m_HitEnnemy;
+    private RaycastHit2D m_HitGoro;
+    public bool CanFly
+    {
+        get { return m_CanFly; }
+    }
     public int Hp
     {
         get { return m_Hp; }
@@ -66,7 +70,7 @@ public class PlayerController : MonoBehaviour
             }
         }
         //INPUT MANAGER
-        if (Input.GetKeyDown(KeyCode.K) && !m_IsDead)
+        if (Input.GetKeyDown(KeyCode.K) && !m_IsDead && m_IsGrounded)
         {
             m_MoveDir = Vector2.zero;
             m_Animator.SetTrigger("Kick");
@@ -97,7 +101,10 @@ public class PlayerController : MonoBehaviour
             //m_Animator.SetBool("Jump", false);
         }
 
-        m_Player.velocity = m_MoveDir;
+        if(m_Player != null)
+        {
+            m_Player.velocity = m_MoveDir;
+        }
     }
 
     private void Jump()
@@ -110,8 +117,6 @@ public class PlayerController : MonoBehaviour
             m_Player.AddForce(transform.up * m_JumpForce);
         }
     }
-
-    
 
     public void SetCanMove()
     {
@@ -133,24 +138,30 @@ public class PlayerController : MonoBehaviour
         m_RayPos.y = transform.position.y;
         if (m_Visual.flipX == false)
         {
-            m_Hit = Physics2D.Raycast(m_RayPos, transform.right, 2f, LayerMask.GetMask("Enemy"));
+            m_HitEnnemy = Physics2D.Raycast(m_RayPos, transform.right, 2.5f, LayerMask.GetMask("Enemy"));
+            m_HitGoro = Physics2D.Raycast(m_RayPos, transform.right, 2.5f, LayerMask.GetMask("Goro"));
         }
         else
         {
-            m_Hit = Physics2D.Raycast(m_RayPos, -transform.right, 2f, LayerMask.GetMask("Enemy"));
+            m_HitEnnemy = Physics2D.Raycast(m_RayPos, -transform.right, 2.5f, LayerMask.GetMask("Enemy"));
+            m_HitGoro = Physics2D.Raycast(m_RayPos, -transform.right, 2.5f, LayerMask.GetMask("Goro"));
         }
 
-        if (m_Hit.collider != null)
-        {
-            if(m_Hit.collider.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+
+            if(m_HitEnnemy.collider != null && m_HitEnnemy.collider.gameObject.layer == LayerMask.NameToLayer("Enemy"))
             {
-                m_Hit.collider.gameObject.GetComponent<Ennemy>().Die();
+                m_HitEnnemy.collider.gameObject.GetComponent<Ennemy>().Die();
             }
-            else if(m_Hit.collider.gameObject.layer == LayerMask.NameToLayer("Goro") && !m_Hit.collider.gameObject.GetComponent<Boss>().IsVulnerable)
+            if(m_HitGoro.collider != null && m_HitGoro.collider.gameObject.layer == LayerMask.NameToLayer("Goro") && m_HitGoro.collider.gameObject.GetComponent<Boss>().IsVulnerable)
             {
-                m_Hit.collider.gameObject.GetComponent<Boss>().LoseLife();
+                m_HitGoro.collider.gameObject.GetComponent<Boss>().LoseLife();
             }
-        }
+
+    }
+
+    public void SetCanFly()
+    {
+        m_CanFly = true;
     }
 
     public void OnUpdateHp(int damage = 1)

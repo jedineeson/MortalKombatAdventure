@@ -60,6 +60,12 @@ public class GameManager : MonoBehaviour
         get { return m_PlayerName; }
     }
 
+    private bool m_CheckPointReach = false;
+    public bool CheckPointReach
+    {
+        get { return m_CheckPointReach; }
+    }
+
     private static GameManager m_Instance;
 	public static GameManager Instance
 	{
@@ -93,11 +99,19 @@ public class GameManager : MonoBehaviour
     public void SetZoneReach(int zone)
     {
         m_ZoneReach = zone;
+        StartCoroutine(ShowCheckPointCoroutine());
     }
 
     public void SetLife(int damage)
     {
         m_LifeRemains += damage;
+    }
+
+    private IEnumerator ShowCheckPointCoroutine()
+    {
+        m_CheckPointReach = true;
+        yield return new WaitForSeconds(3f);
+        m_CheckPointReach = false;
     }
 
 }

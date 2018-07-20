@@ -148,7 +148,7 @@ MonoBehaviour:
   m_Player: {fileID: 50681358780663394}
   m_JumpForce: 800
   m_FakeGravity: 20
-  m_Hp: 10
+  m_Hp: 20
 --- !u!212 &212934361113071148
 SpriteRenderer:
   m_ObjectHideFlags: 1

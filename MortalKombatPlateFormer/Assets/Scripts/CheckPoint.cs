@@ -9,9 +9,12 @@ public class CheckPoint : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D aOther)
     {
-        if(aOther.tag == "Player")
+        if(GameManager.Instance.ZoneReach < m_Zone)
         {
-            GameManager.Instance.SetZoneReach(m_Zone);
+            if(aOther.tag == "Player")
+            {
+                GameManager.Instance.SetZoneReach(m_Zone);
+            }
         }
     }
 }
